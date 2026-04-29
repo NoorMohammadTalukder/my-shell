@@ -68,3 +68,71 @@ tokenlist *get_tokens(char *input) {
     free(buf);
     return tokens;
 }
+/ free all memory in tokenlist
+void free_tokens(tokenlist *tokens) {
+    for (int i = 0; i < (int)tokens->size; i++)
+        free(tokens->items[i]);
+    free(tokens->items);
+    free(tokens);
+}
+
+// made up strdup
+static char *str_copy(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *copy = malloc(len);
+    if (copy == NULL) {
+        perror("malloc");
+        exit(1);
+    }
+    memcpy(copy, s, len);
+    return copy;
+}
+
+// replace $VAR tokens with actual env values
+void expand_env_vars(tokenlist *tokens) {
+    char *tok = NULL;
+    char *val = NULL;
+
+    for (int i = 0; i < (int)tokens->size; i++) {
+        tok = tokens->items[i];
+
+        // skip if not env variable
+        if (tok[0] != '$')
+            continue;
+
+        val = getenv(tok + 1);  // skip the $
+        free(tokens->items[i]);
+
+        // replace with value or empty string
+        tokens->items[i] = str_copy(val ? val : "");
+    }
+}
+
+// replace ~ with home directory
+void expand_tilde(tokenlist *tokens) {
+    const char *home = getenv("HOME");
+    if (home == NULL) home = "";
+
+    for (int i = 0; i < (int)tokens->size; i++) {
+        char *tok = tokens->items[i];
+
+        if (tok[0] != '~')
+            continue;
+
+        // just ~ alone
+        if (tok[1] == '\0') {
+            free(tokens->items[i]);
+            tokens->items[i] = str_copy(home);
+        }
+
+        // ~/something
+        else if (tok[1] == '/') {
+            size_t len = strlen(home) + strlen(tok) + 1;
+            char *expanded = malloc(len);
+            strcpy(expanded, home);
+            strcat(expanded, tok + 1);  // skip ~
+            free(tokens->items[i]);
+            tokens->items[i] = expanded;
+        }
+    }
+}
