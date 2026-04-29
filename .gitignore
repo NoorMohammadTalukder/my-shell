@@ -1,0 +1,15 @@
+# Compiled files
+bin/
+obj/
+*.o
+
+# Executable
+bin/shell
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
