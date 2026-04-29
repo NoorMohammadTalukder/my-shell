@@ -10,10 +10,10 @@ typedef struct {
 } tokenlist;
 
 // read user input
-cha*get_input(void);
+char *get_input(void);
 
 // split input into tokens
-tokenlist *get_tokens(char *input)
+tokenlist *get_tokens(char *input);
 
 // create empty tokenlist
 tokenlist *new_tokenlist(void);
