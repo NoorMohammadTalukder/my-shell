@@ -1,5 +1,5 @@
 #include "lexer.h"
-#include <stdi.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,7 +9,7 @@ tokenlist *new_tokenlist(void) {
     tokens->size = 0;
     tokens->items = (char **)malloc(sizeof(char *));
     tokens->items[0] = NULL;
-    return tokens
+    return tokens;
 }
 
 // add one word into the tokenlist
@@ -24,11 +24,11 @@ void add_token(tokenlist *tokens, char *item) {
 
 // reads user input line by line
 char *get_input(void) {
-    char *buffer = NUL;
+    char *buffer = NULL;
     int bufsize = 0;
     char line[8];
 
-    while (fget(line, 8, stdin) != NULL) {
+    while (fgets(line, 8, stdin) != NULL) {
         int addby = 0;
         char *newln = strchr(line, '\n');
 
@@ -49,7 +49,7 @@ char *get_input(void) {
         return NULL;
 
     buffer[bufsize] = '\0';
-    return bufer;
+    return buffer;
 }
 
 // split input string into tokens
@@ -57,7 +57,7 @@ tokenlist *get_tokens(char *input) {
     char *buf = (char *)malloc(strlen(input) + 1);
     strcpy(buf, input);
 
-    tokenlist *tokens = new_tokenlist()
+    tokenlist *tokens = new_tokenlist();
     char *word = strtok(buf, " ");
 
     while (word != NULL) {
@@ -68,7 +68,8 @@ tokenlist *get_tokens(char *input) {
     free(buf);
     return tokens;
 }
-/ free all memory in tokenlist
+
+// free all memory in tokenlist
 void free_tokens(tokenlist *tokens) {
     for (int i = 0; i < (int)tokens->size; i++)
         free(tokens->items[i]);
