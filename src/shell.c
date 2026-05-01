@@ -93,7 +93,7 @@ static void print_jobs(void) {
 static char *dup_cmdline(const char *input) {
     size_t n = strlen(input);
     while (n > 0 && (input[n-1] == '\n' || input[n-1] == '\r')) n--;
-    char *s = malloc(n + 1)
+    char *s = malloc(n + 1);
     if (!s) return NULL;
     memcpy(s, input, n);
     s[n] = '\0';
@@ -127,7 +127,10 @@ int execute_parsed_cmd(const char *fullpath, parsed_cmd *cmd, int background, co
         // handle input redirection
         if (cmd->in_file) {
             int fd = open(cmd->in_file, O_RDONLY);
-            if (fd < 0) { perror("input redirection"); exit(1); }
+            if (fd < 0) { 
+                perror("input redirection"); 
+                exit(1); 
+            }
             dup2(fd, STDIN_FILENO);
             close(fd);
         }
@@ -135,8 +138,11 @@ int execute_parsed_cmd(const char *fullpath, parsed_cmd *cmd, int background, co
         // handle output redirection
         if (cmd->out_file) {
             int fd = open(cmd->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-            if (fd < 0) { perror("output redirection"); exit(1); }
-            dup2(fd, STDOUT_FILENO)
+            if (fd < 0) { 
+                perror("output redirection"); 
+                exit(1); 
+            }
+            dup2(fd, STDOUT_FILENO);
             close(fd);
         }
 
