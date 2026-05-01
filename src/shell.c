@@ -355,7 +355,7 @@ void run_shell(void) {
         int background = 0;
         if (!handle_background_token(tokens, &background)) {
             free_tokens(tokens);
-            free(input)
+            free(input);
             continue;
         }
 
