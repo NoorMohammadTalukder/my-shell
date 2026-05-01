@@ -72,7 +72,7 @@ parsed_cmd parse_command(tokenlist *tokens) {
 // find empty slot in job table
 static int find_free_job_slot(void) {
     for (int i = 0; i < MAX_JOBS; i++) {
-        if (job_table[i].active) return i;
+        if (!job_table[i].active) return i;
     }
     return -1;
 }
