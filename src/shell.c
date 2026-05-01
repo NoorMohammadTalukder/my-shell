@@ -24,7 +24,7 @@ static int next_job_id = 1;
 
 // print the shell prompt
 static void print_prompt(void) {
-    const char *user = getenv("USER")
+    const char *user = getenv("USER");
     const char *machine = getenv("MACHINE");
     const char *pwd = getenv("PWD");
 
@@ -58,7 +58,7 @@ parsed_cmd parse_command(tokenlist *tokens) {
         }
         else if (strcmp(tokens->items[i], ">") == 0) {
             if (i + 1 < tokens->size)
-                cmd.out_file = tokens->items[++i]
+                cmd.out_file = tokens->items[++i];
         }
         else {
             cmd.argv[argc++] = tokens->items[i];
